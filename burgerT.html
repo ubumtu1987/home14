@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+	<meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	 
+
+		<title>Hambuger</title>
+	</head>
+	<body>
+		
+		   <div class="container">
+          <div class= 'row'>
+                     <div class = "col-md-12" Id = "UserChoose" > Burger
+                     </div> 
+                    
+          </div>
+           <div class= 'row'>
+                     <div class = "col-md-6" Id = "addition" > 
+                     </div> 
+                     <div class = "col-md-6" Id = "ListBurger" >
+                    </div>
+                    
+          </div>
+
+          <div class= 'row'>
+
+					      <div class="form-group">
+
+		                <label for="Product">Type Burger</label>
+
+		                <input type="text" class="form-control" id="Quan">
+
+		               
+                 </div>
+					</div>
+          <div class = "row">
+          					 <button type="submit" class="btn btn-default" id="run-search"><i class="fa fa-search"></i> Start</button>
+                     
+          </div>
+            
+				      
+		    </div>
+	  <script> 
+            
+            window.onload = function(){
+          
+              $.ajax({
+                   method : 'get',            
+   
+                   url: '/api/burgerQ',
+               
+                   
+                   }).then(function(data){
+                     
+                        
+
+                      
+                      for( let i = 0 ; i < data.length; i++ ){
+                        var letterBtn = $("<div>");
+                        var letterS = $("<span>");
+                        letterS.text(data[i].position +" : ");
+                        letterBtn.append(letterS);
+                        var letterV =$("<span>");
+                        letterV.text(data[i].type);
+                        letterBtn.append(letterV);
+                        $('#ListBurger').append(letterBtn);
+
+
+                      }  
+                      
+
+                
+            }); 
+          
+          };
+
+
+             
+
+
+              $("#run-search").on("click", function(event) {
+                var receiverAnswer =  $("#Quan").val().trim();
+               
+                //var receiverAnswer2 =  $("#QuanS").val().trim();
+
+                var letterBtn = $("<div>");
+                var buttonB = $("<button>");
+                buttonB.text("Eating");
+                buttonB.addClass("cliker");
+                
+                buttonB.attr('value', receiverAnswer );
+                letterBtn.text(receiverAnswer); 
+                
+                letterBtn.append(buttonB);  
+                
+                var s = buttonB.attr("value");
+                console.log(s);
+                $("#addition").append( letterBtn);
+                 
+
+
+
+              });
+
+             $( document ).on( 'click', '.cliker', function () {
+                   
+                   var sendValue = {
+                   burger :   $(this).attr("value")
+
+                   }  
+                   console.log(sendValue);
+
+                   $.ajax({
+                   method : 'post',            
+   
+                   url: '/api/burgerC',
+               
+                   data : sendValue
+               
+               
+                   }).then(function(data){
+                   console.log(data);
+                   
+                    
+
+
+                
+                   }); 
+                   $(this).parent().remove();
+
+
+             }); 
+
+ 
+   
+     
+             
+           
+            
+
+
+
+
+      </script>
+	</body>
+</html>
